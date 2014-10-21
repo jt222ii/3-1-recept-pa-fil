@@ -148,23 +148,39 @@ namespace FiledRecipes.Domain
                     case SectionInstructions:
                         recipeReadStatus = RecipeReadStatus.Instruction;
                         continue;
+                    default:
+                        switch (recipeReadStatus)
+                        {
+                            case RecipeReadStatus.New:
+                                //skapa ett nytt receptobjekt med receptets namn
+                                recipes.Add(line);
+                                continue;
+                            case RecipeReadStatus.Ingredient:
+                                //1. Dela upp raden i delar genom att använda metoden Split() i klassen 
+                                //String. De olika delarna separeras åt med semikolon varför det 
+                                //alltid ska bli tre delar.
+                                string[] ingredient = line.Split(new string[] { ";" }, StringSplitOptions.None);
+                                //2. Om antalet delar inte är tre…
+                                //a. …är något fel varför ett undantag av typen 
+                                //FileFormatException ska kastas.
+                                if(ingredient.Length % 3 != 0)
+                                {
+                                    throw new FileFormatException();
+                                }
+                                //3. Skapa ett ingrediensobjekt och initiera det med de tre delarna för 
+                                //mängd, mått och namn.
+                                //4. Lägg till ingrediensen till receptets lista med ingredienser
+                                
+                                continue;
+                            case RecipeReadStatus.Instruction:
+                                //Lägg till raden till receptets lista med instruktioner.
+                                continue;
+                            case RecipeReadStatus.Indefinite:
+                                //…är något fel varför ett undantag av typen FileFormatException ska kastas.
+                                throw new FileFormatException();
+                        }
+                        continue;
                 }
-                switch(recipeReadStatus)
-                {
-                    case RecipeReadStatus.New:
-                        continue;
-                    case RecipeReadStatus.Ingredient:
-                        continue;
-                    case RecipeReadStatus.Instruction:
-                        continue;
-                    case RecipeReadStatus.Indefinite:
-                        throw new FileFormatException();
-
-                }
-
-
-
-
 
             }
         }
