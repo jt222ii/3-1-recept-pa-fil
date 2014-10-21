@@ -126,6 +126,49 @@ namespace FiledRecipes.Domain
                 // Use the () operator to raise the event.
                 handler(this, e);
             }
+        } 
+
+
+        public void Load()
+        {
+            List<string> recipes = new List<string>();
+            RecipeReadStatus recipeReadStatus = new RecipeReadStatus();
+            StreamReader reader = new StreamReader(@"C:\Users\Jonas\Desktop\Recept på fil\3-1-recept-pa-fil\FiledRecipes\FiledRecipes\App_Data\Recipes.txt"); 
+            string line;
+            while((line = reader.ReadLine()) != null)
+            {
+                switch (line)
+                {
+                    case SectionRecipe: // SectionRecipe och de andra är konstanter som skapats ovan
+                        recipeReadStatus = RecipeReadStatus.New;
+                        continue;
+                    case SectionIngredients:
+                        recipeReadStatus = RecipeReadStatus.Ingredient;
+                        continue;
+                    case SectionInstructions:
+                        recipeReadStatus = RecipeReadStatus.Instruction;
+                        continue;
+                }
+                switch(recipeReadStatus)
+                {
+                    case RecipeReadStatus.New:
+                        continue;
+                    case RecipeReadStatus.Ingredient:
+                        continue;
+                    case RecipeReadStatus.Instruction:
+                        continue;
+                    case RecipeReadStatus.Indefinite:
+                        throw new FileFormatException();
+
+                }
+
+
+
+
+
+            }
         }
+        public void Save()
+        { }
     }
 }
