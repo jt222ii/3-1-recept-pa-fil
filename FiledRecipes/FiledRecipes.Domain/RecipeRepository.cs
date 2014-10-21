@@ -134,8 +134,10 @@ namespace FiledRecipes.Domain
             List<string> recipes = new List<string>();
             RecipeReadStatus recipeReadStatus = new RecipeReadStatus();
             //ska "using" användas som han visade på föreläsningen?
+            //2. Öppna textfilen för läsning.
             StreamReader reader = new StreamReader(@"C:\Users\Jonas\Desktop\Recept på fil\3-1-recept-pa-fil\FiledRecipes\FiledRecipes\App_Data\Recipes.txt"); 
             string line;
+            //3. Läs rad från textfilen tills det är slut på filen.
             while((line = reader.ReadLine()) != null)
             {
                 switch (line)
@@ -193,6 +195,12 @@ namespace FiledRecipes.Domain
                 }
             }
             recipes.TrimExcess(); // tar bort de tomma "lådorna" i den dynamiska arrayen recipes.
+            //4. Sortera listan med recept med avseende på receptens namn.
+            //5. Tilldela avsett fält i klassen, _recipes, en referens till listan.
+            //6. Tilldela avsedd egenskap i klassen, IsModified, ett värde som indikerar att listan med recept 
+            //är oförändrad.
+            //7. Utlös händelse om att recept har lästs in genom att anropa metoden OnRecipesChanged och 
+            //skicka med parametern EventArgs.Empty.
         }
         public void Save()
         { }
