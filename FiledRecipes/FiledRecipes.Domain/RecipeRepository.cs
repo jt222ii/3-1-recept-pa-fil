@@ -144,61 +144,64 @@ namespace FiledRecipes.Domain
                 //3. Läs rad från textfilen tills det är slut på filen.
                 while ((line = reader.ReadLine()) != null)
                 {
-                    switch (line)
-                    {
-                        case SectionRecipe: // SectionRecipe och de andra är konstanter som skapats ovan
+                        if (line == SectionRecipe)
+                        {// SectionRecipe och de andra är konstanter som skapats ovan
                             recipeReadStatus = RecipeReadStatus.New;
-                            continue;
-                        case SectionIngredients:
+                        }
+                        if(line == SectionIngredients)
+                        {
                             recipeReadStatus = RecipeReadStatus.Ingredient;
-                            continue;
-                        case SectionInstructions:
+                        }
+                        if(line == SectionInstructions)
+                        {
                             recipeReadStatus = RecipeReadStatus.Instruction;
-                            continue;
-                        default:
-                            switch (recipeReadStatus)
+                        }
+                            //ska det vara else?
+                        else
+                        {
+                            if (recipeReadStatus == RecipeReadStatus.New)
                             {
-                                case RecipeReadStatus.New:
-                                    //skapa ett nytt receptobjekt med receptets namn
-                                    fullRecipe = new Recipe(line);
-                                    recipes.Add(fullRecipe);
-                                    continue;
-                                case RecipeReadStatus.Ingredient:
-                                    //1. Dela upp raden i delar genom att använda metoden Split() i klassen 
-                                    //String. De olika delarna separeras åt med semikolon varför det 
-                                    //alltid ska bli tre delar.
-                                    string[] ingredients = line.Split(new string[] { ";" }, StringSplitOptions.None);
-                                    //2. Om antalet delar inte är tre…
-                                    //a. …är något fel varför ett undantag av typen 
-                                    //FileFormatException ska kastas.
-                                    if (ingredients.Length % 3 != 0)
-                                    {
-                                        throw new FileFormatException();
-                                    }
-                                    //3. Skapa ett ingrediensobjekt och initiera det med de tre delarna för 
-                                    //mängd, mått och namn.
-                                    Ingredient ingredient = new Ingredient();
-                                    ingredient.Amount = ingredients[0]; // 0 för att "4,5;dl;filmjölk" blir [0];[1];[2]
-                                    ingredient.Measure = ingredients[1];
-                                    ingredient.Name = ingredients[2];
-                                    //4. Lägg till ingrediensen till receptets lista med ingredienser
-                                    //foreach (string ingredientToList in ingredients)
-                                    //{
-                                    //    recipes.Add(ingredientToList);
-                                    //}
-                                    fullRecipe.Add(ingredient);
-                                    continue;
-                                case RecipeReadStatus.Instruction:
-                                    //Lägg till raden till receptets lista med instruktioner.
-                                    fullRecipe.Add(line);
-                                    continue;
-                                case RecipeReadStatus.Indefinite:
-                                    //…är något fel varför ett undantag av typen FileFormatException ska kastas.
-                                    throw new FileFormatException();
+                                //skapa ett nytt receptobjekt med receptets namn
+                                fullRecipe = new Recipe(line);
+                                recipes.Add(fullRecipe);
                             }
-                            continue;
-                    }
-
+                            if (recipeReadStatus == RecipeReadStatus.Ingredient)
+                            {
+                                //1. Dela upp raden i delar genom att använda metoden Split() i klassen 
+                                //String. De olika delarna separeras åt med semikolon varför det 
+                                //alltid ska bli tre delar.
+                                string[] ingredients = line.Split(new string[] { ";" }, StringSplitOptions.None);
+                                //2. Om antalet delar inte är tre…
+                                //a. …är något fel varför ett undantag av typen 
+                                //FileFormatException ska kastas.
+                                if (ingredients.Length % 3 != 0)
+                                {
+                                    throw new FileFormatException();
+                                }
+                                //3. Skapa ett ingrediensobjekt och initiera det med de tre delarna för 
+                                //mängd, mått och namn.
+                                Ingredient ingredient = new Ingredient();
+                                ingredient.Amount = ingredients[0]; // 0 för att "4,5;dl;filmjölk" blir [0];[1];[2]
+                                ingredient.Measure = ingredients[1];
+                                ingredient.Name = ingredients[2];
+                                //4. Lägg till ingrediensen till receptets lista med ingredienser
+                                //foreach (string ingredientToList in ingredients)
+                                //{
+                                //    recipes.Add(ingredientToList);
+                                //}
+                                fullRecipe.Add(ingredient);
+                            }
+                            if (recipeReadStatus == RecipeReadStatus.Instruction)
+                            {
+                                //Lägg till raden till receptets lista med instruktioner.
+                                fullRecipe.Add(line);
+                            }
+                            if (recipeReadStatus == RecipeReadStatus.Indefinite)
+                            {
+                                //…är något fel varför ett undantag av typen FileFormatException ska kastas.
+                                throw new FileFormatException();
+                            }
+                        }  
                 }
                 //4. Sortera listan med recept med avseende på receptens namn.
                 //5. Tilldela avsett fält i klassen, _recipes, en referens till listan.
