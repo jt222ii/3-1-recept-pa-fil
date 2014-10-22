@@ -14,9 +14,11 @@ namespace FiledRecipes.Views
     {
         public void Show(IRecipe recipe)
         {
+
         }
         public void Show(IEnumerable<IRecipe> recipe)
         {
+
         }
     }
 }
