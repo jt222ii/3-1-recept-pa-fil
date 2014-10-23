@@ -229,9 +229,18 @@ namespace FiledRecipes.Domain
                     writer.WriteLine(recipe.Name);
                     //skriv "[Ingredienser]" och ingredienserna - [Ingredienser] -> SectionIngredients | Ingredienserna är det man gav dem ovan. ingredient.Amount, ingredient.Measure och ingredient.Name
                     writer.WriteLine(SectionIngredients);
+                    foreach(Ingredient ingredient in recipe.Ingredients)
+                    {
+                        writer.WriteLine(ingredient.Amount, ingredient.Measure, ingredient.Name);
+                    }
 
                     //skriv "[Instruktioner]" och instruktionerna - [Instruktioner] -> SectionInstuctions | recipe.Instructions
                     //för varje 
+                    writer.WriteLine(SectionInstructions);
+                    foreach(string instructions in recipe.Instructions)
+                    {
+                        writer.WriteLine(instructions);
+                    }
                 }
             }
 
