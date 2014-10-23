@@ -214,6 +214,16 @@ namespace FiledRecipes.Domain
             }
         }
         public void Save()
-        { }
+        { 
+            //Recept ska sparas permanent i textfilen recipes.txt. Väljer användaren menyalternativet 
+            //’2. Spara’ ska applikationen öppna textfilen och skriva recepten rad för rad till textfilen. Finns redan 
+            //textfilen ska den skrivas över.
+            //streamwriter? antagligen
+            using (StreamWriter writer = new StreamWriter(@"Recipes.txt"))
+            {
+
+            }
+
+        }
     }
 }
