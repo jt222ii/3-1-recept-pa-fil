@@ -225,7 +225,11 @@ namespace FiledRecipes.Domain
                 foreach (Recipe recipe in _recipes)
                 {
                     //skriv "[Recept]" och receptets namn - [Recept] -> SectionRecipe
+                    Console.WriteLine(SectionRecipe);
+                    Console.WriteLine(recipe.Name);
                     //skriv "[Ingredienser]" och ingredienserna - [Ingredienser] -> SectionIngredients | Ingredienserna är det man gav dem ovan. ingredient.Amount, ingredient.Measure och ingredient.Name
+                    Console.WriteLine(SectionIngredients);
+
                     //skriv "[Instruktioner]" och instruktionerna - [Instruktioner] -> SectionInstuctions | recipe.Instructions
                     //för varje 
                 }
