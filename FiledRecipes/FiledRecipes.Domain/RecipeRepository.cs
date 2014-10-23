@@ -199,7 +199,8 @@ namespace FiledRecipes.Domain
                     } 
                 
                 }
-                //recipes.TrimExcess(); // tar bort det tomma i den dynamiska arrayen.
+                
+                recipes.TrimExcess(); // tar bort det tomma i den dynamiska arrayen.
                 //4. Sortera listan med recept med avseende på receptens namn.
                 //5. Tilldela avsett fält i klassen, _recipes, en referens till listan.
                 _recipes =  recipes.OrderBy(recipe => recipe.Name ).ToList();
