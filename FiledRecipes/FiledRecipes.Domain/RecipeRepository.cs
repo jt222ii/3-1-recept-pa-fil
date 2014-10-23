@@ -219,9 +219,16 @@ namespace FiledRecipes.Domain
             //’2. Spara’ ska applikationen öppna textfilen och skriva recepten rad för rad till textfilen. Finns redan 
             //textfilen ska den skrivas över.
             //streamwriter? antagligen
-            using (StreamWriter writer = new StreamWriter(@"Recipes.txt"))
+            using (StreamWriter writer = new StreamWriter(@"Recipes.txt"))   //http://msdn.microsoft.com/en-us/library/8bh11f1k.aspx
             {
-
+                //för varje recept skriv receptet
+                foreach (Recipe recipe in _recipes)
+                {
+                    //skriv "[Recept]" och receptets namn - [Recept] -> SectionRecipe
+                    //skriv "[Ingredienser]" och ingredienserna - [Ingredienser] -> SectionIngredients | Ingredienserna är det man gav dem ovan. ingredient.Amount, ingredient.Measure och ingredient.Name
+                    //skriv "[Instruktioner]" och instruktionerna - [Instruktioner] -> SectionInstuctions | recipe.Instructions
+                    //för varje 
+                }
             }
 
         }
