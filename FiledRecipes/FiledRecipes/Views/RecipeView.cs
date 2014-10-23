@@ -27,10 +27,12 @@ namespace FiledRecipes.Views
             }
             //skriva ut instruktioner - foreach här också
             //för varje instruktion i instruktioner
+            int instructionPart = 1;
             Console.WriteLine("\nGör Så Här\n----------");
             foreach(string instruction in recipe.Instructions)
             {
-                Console.WriteLine(instruction);
+                Console.WriteLine("<{0}>\n {1}", instructionPart, instruction);
+                instructionPart++;
             }
 
 
