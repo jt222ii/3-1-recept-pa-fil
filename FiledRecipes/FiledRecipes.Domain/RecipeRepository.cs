@@ -137,8 +137,8 @@ namespace FiledRecipes.Domain
             RecipeReadStatus recipeReadStatus = new RecipeReadStatus(); //enum
             //ska "using" användas som han visade på föreläsningen?
             //2. Öppna textfilen för läsning.
-            using (StreamReader reader = new StreamReader(@"Recipes.txt", System.Text.Encoding.UTF7))
-            {
+            using (StreamReader reader = new StreamReader(@"Recipes.txt", System.Text.Encoding.UTF7)) // av någon anledning slutade Å, Ä och Ö att fungera och ersattes av "?". 
+            {                                                                                          // Googlade och hittade att man kunde sätta att det skulle vara UTF8 men det funkade inte med 8. Har ingen aning om varför utf7 fungerar...                                 
                 //@"C:\Users\Jonas\Desktop\Recept på fil\3-1-recept-pa-fil\FiledRecipes\FiledRecipes\App_Data\Recipes.txt")
                 string line;
                 //3. Läs rad från textfilen tills det är slut på filen.
