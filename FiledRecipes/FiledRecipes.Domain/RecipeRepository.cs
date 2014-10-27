@@ -137,7 +137,7 @@ namespace FiledRecipes.Domain
             RecipeReadStatus recipeReadStatus = new RecipeReadStatus(); //enum
             //ska "using" användas som han visade på föreläsningen?
             //2. Öppna textfilen för läsning.
-            using (StreamReader reader = new StreamReader(@"Recipes.txt", System.Text.Encoding.UTF8)) // av någon anledning slutade Å, Ä och Ö att fungera och ersattes av "?" fixade det med System.Text.Encoding.UTF8
+            using (StreamReader reader = new StreamReader(_path, System.Text.Encoding.UTF8)) // av någon anledning slutade Å, Ä och Ö att fungera och ersattes av "?" fixade det med System.Text.Encoding.UTF8
             {                                                                                                                          
                 //@"C:\Users\Jonas\Desktop\Recept på fil\3-1-recept-pa-fil\FiledRecipes\FiledRecipes\App_Data\Recipes.txt")
                 string line;
@@ -157,46 +157,49 @@ namespace FiledRecipes.Domain
                             continue;
                     }
                             //ska det vara else?
-                    switch(recipeReadStatus)
+                    if (line != "")
                     {
-                        case RecipeReadStatus.New:
-                            //skapa ett nytt receptobjekt med receptets namn
-                            fullRecipe = new Recipe(line);
-                            recipes.Add(fullRecipe);
-                            break;
-                        case RecipeReadStatus.Ingredient:
-                            //1. Dela upp raden i delar genom att använda metoden Split() i klassen 
-                            //String. De olika delarna separeras åt med semikolon varför det 
-                            //alltid ska bli tre delar.
-                            string[] ingredients = line.Split(new string[] { ";" }, StringSplitOptions.None);
-                            //2. Om antalet delar inte är tre…
-                            //a. …är något fel varför ett undantag av typen 
-                            //FileFormatException ska kastas.
-                            if (ingredients.Length % 3 != 0)
-                            {
+                        switch (recipeReadStatus)
+                        {
+                            case RecipeReadStatus.New:
+                                //skapa ett nytt receptobjekt med receptets namn
+                                fullRecipe = new Recipe(line);
+                                recipes.Add(fullRecipe);
+                                break;
+                            case RecipeReadStatus.Ingredient:
+                                //1. Dela upp raden i delar genom att använda metoden Split() i klassen 
+                                //String. De olika delarna separeras åt med semikolon varför det 
+                                //alltid ska bli tre delar.
+                                string[] ingredients = line.Split(new string[] { ";" }, StringSplitOptions.None);
+                                //2. Om antalet delar inte är tre…
+                                //a. …är något fel varför ett undantag av typen 
+                                //FileFormatException ska kastas.
+                                if (ingredients.Length % 3 != 0)
+                                {
+                                    throw new FileFormatException();
+                                }
+                                //3. Skapa ett ingrediensobjekt och initiera det med de tre delarna för 
+                                //mängd, mått och namn.
+                                Ingredient ingredient = new Ingredient();
+                                ingredient.Amount = ingredients[0]; // 0 för att "4,5;dl;filmjölk" blir [0];[1];[2]
+                                ingredient.Measure = ingredients[1];
+                                ingredient.Name = ingredients[2];
+                                //4. Lägg till ingrediensen till receptets lista med ingredienser
+                                //foreach (string ingredientToList in ingredients)
+                                //{
+                                //    recipes.Add(ingredientToList);
+                                //}
+                                fullRecipe.Add(ingredient);
+                                break;
+                            case RecipeReadStatus.Instruction:
+                                //Lägg till raden till receptets lista med instruktioner.
+                                fullRecipe.Add(line);
+                                break;
+                            case RecipeReadStatus.Indefinite:
+                                //…är något fel varför ett undantag av typen FileFormatException ska kastas.
                                 throw new FileFormatException();
-                            }
-                            //3. Skapa ett ingrediensobjekt och initiera det med de tre delarna för 
-                            //mängd, mått och namn.
-                            Ingredient ingredient = new Ingredient();
-                            ingredient.Amount = ingredients[0]; // 0 för att "4,5;dl;filmjölk" blir [0];[1];[2]
-                            ingredient.Measure = ingredients[1];
-                            ingredient.Name = ingredients[2];
-                            //4. Lägg till ingrediensen till receptets lista med ingredienser
-                            //foreach (string ingredientToList in ingredients)
-                            //{
-                            //    recipes.Add(ingredientToList);
-                            //}
-                            fullRecipe.Add(ingredient);
-                            break;
-                        case RecipeReadStatus.Instruction:
-                            //Lägg till raden till receptets lista med instruktioner.
-                            fullRecipe.Add(line);
-                            break;
-                        case RecipeReadStatus.Indefinite:                       
-                            //…är något fel varför ett undantag av typen FileFormatException ska kastas.
-                            throw new FileFormatException();                       
-                    } 
+                        }
+                    }
                 
                 }
                 
@@ -222,7 +225,7 @@ namespace FiledRecipes.Domain
             //textfilen ska den skrivas över.
             //streamwriter? antagligen
 
-            using (StreamWriter writer = new StreamWriter(@"Recipes.txt"))   //http://msdn.microsoft.com/en-us/library/8bh11f1k.aspx //, false, Encoding.Default
+            using (StreamWriter writer = new StreamWriter(_path))   //http://msdn.microsoft.com/en-us/library/8bh11f1k.aspx //, false, Encoding.Default
             {
                 //för varje recept skriv receptet
                 foreach (Recipe recipe in _recipes)
@@ -245,8 +248,9 @@ namespace FiledRecipes.Domain
                         writer.WriteLine(instructions);
                     }
                 }
+                IsModified = false;
+                OnRecipesChanged(EventArgs.Empty);
             }
-
         }
     }
 }
