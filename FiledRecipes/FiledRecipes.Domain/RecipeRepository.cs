@@ -133,32 +133,33 @@ namespace FiledRecipes.Domain
         {
            // List<string> recipes = new List<string>();
             List<IRecipe> recipes = new List<IRecipe>();
-            Recipe fullRecipe = null;
-            RecipeReadStatus recipeReadStatus = new RecipeReadStatus(); //enum
+            Recipe fullRecipe = null;  //skapar en hänvisning till recipe för att använda senare
+            RecipeReadStatus recipeReadStatus = new RecipeReadStatus(); //enum för att använda i våra switchar(eller om man använt if)
             //ska "using" användas som han visade på föreläsningen?
             //2. Öppna textfilen för läsning.
             using (StreamReader reader = new StreamReader(_path, System.Text.Encoding.UTF8)) // av någon anledning slutade Å, Ä och Ö att fungera och ersattes av "?" fixade det med System.Text.Encoding.UTF8
-            {                                                                                                                          
+            {                                                                                //using för att den ska stänga ner filen när den har gjort det vi vill göra                                                                                                                       
                 //@"C:\Users\Jonas\Desktop\Recept på fil\3-1-recept-pa-fil\FiledRecipes\FiledRecipes\App_Data\Recipes.txt")
                 string line;
                 //3. Läs rad från textfilen tills det är slut på filen.
                 while ((line = reader.ReadLine()) != null)
                 {
-                    switch(line)
-                    { 
-                        case SectionRecipe:// SectionRecipe och de andra är konstanter som skapats ovan
-                            recipeReadStatus = RecipeReadStatus.New;
-                            continue;
-                        case SectionIngredients:
-                            recipeReadStatus = RecipeReadStatus.Ingredient;
-                            continue;
-                        case SectionInstructions:
-                            recipeReadStatus = RecipeReadStatus.Instruction;
-                            continue;
-                    }
-                            //ska det vara else?
-                    if (line != "")
+                    if (line != "") //fråga om detta
                     {
+                        switch(line)
+                        { 
+                            case SectionRecipe:// SectionRecipe och de andra är konstanter som skapats ovan
+                                recipeReadStatus = RecipeReadStatus.New;
+                                continue;
+                            case SectionIngredients:
+                                recipeReadStatus = RecipeReadStatus.Ingredient;
+                                continue;
+                            case SectionInstructions:
+                                recipeReadStatus = RecipeReadStatus.Instruction;
+                                continue;
+                        }
+                                //ska det vara else?
+
                         switch (recipeReadStatus)
                         {
                             case RecipeReadStatus.New:
@@ -184,11 +185,7 @@ namespace FiledRecipes.Domain
                                 ingredient.Amount = ingredients[0]; // 0 för att "4,5;dl;filmjölk" blir [0];[1];[2]
                                 ingredient.Measure = ingredients[1];
                                 ingredient.Name = ingredients[2];
-                                //4. Lägg till ingrediensen till receptets lista med ingredienser
-                                //foreach (string ingredientToList in ingredients)
-                                //{
-                                //    recipes.Add(ingredientToList);
-                                //}
+
                                 fullRecipe.Add(ingredient);
                                 break;
                             case RecipeReadStatus.Instruction:
@@ -228,14 +225,14 @@ namespace FiledRecipes.Domain
             using (StreamWriter writer = new StreamWriter(_path))   //http://msdn.microsoft.com/en-us/library/8bh11f1k.aspx //, false, Encoding.Default
             {
                 //för varje recept skriv receptet
-                foreach (Recipe recipe in _recipes)
+                foreach (IRecipe recipe in _recipes)
                 {
                     //skriv "[Recept]" och receptets namn - [Recept] -> SectionRecipe
                     writer.WriteLine(SectionRecipe);
                     writer.WriteLine(recipe.Name);
                     //skriv "[Ingredienser]" och ingredienserna - [Ingredienser] -> SectionIngredients | Ingredienserna är det man gav dem ovan. ingredient.Amount, ingredient.Measure och ingredient.Name
                     writer.WriteLine(SectionIngredients);
-                    foreach(Ingredient ingredient in recipe.Ingredients)
+                    foreach(IIngredient ingredient in recipe.Ingredients)
                     {
                         writer.WriteLine("{0};{1};{2}", ingredient.Amount, ingredient.Measure, ingredient.Name);
                     }

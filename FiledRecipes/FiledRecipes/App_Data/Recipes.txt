@@ -1,28 +1,3 @@
-﻿[Recept]
-Filmjölkslimpa
-[Ingredienser]
-4,5;dl;filmjölk
-1;dl;mörk sirap
-1;dl;vetekross
-1;dl;rågkross
-1;dl;havregryn
-2,5;dl;grovt rågmjöl
-3;dl;vetemjöl
-1;dl;linfrön
-1;dl;solrosfrön
-1,5;tsk;salt
-1,5;tsk;bakpulver
-1,5;tsk;bikarbonat
-2;tsk;brödkryddor
-1;dl;hasselnötter
-1;dl;torkade fikon
-1;dl;russin
-[Instruktioner]
-Sätt ugnen på 200 grader.
-Blanda filmjölk och sirap i en bunke.
-Skär bort kvisten från fikonen och hacka dem och hasselnötterna grovt, blanda med de torra ingredienserna och filmjölken.
-Lägg ett bakplåtspapper i en avlång brödform så att pappret sticker ut över kanterna.
-Fyll formen med smet, strö över lite grovt rågmjöl och grädda brödet i cirka 45 minuter.
 [Recept]
 Filbunke med färska bär
 [Ingredienser]
